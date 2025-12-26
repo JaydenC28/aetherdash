@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aether One — Founder Dashboard (OTA Progression)</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.045);
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --muted2:rgba(255,255,255,.45);
+      --good:rgba(90,255,210,.95);
+      --warn:rgba(255,210,120,.95);
+      --bad:rgba(255,120,120,.95);
+      --glow:rgba(120,190,255,.28);
+      --glow2:rgba(180,120,255,.22);
+      --radius:18px;
+      --radius2:22px;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 18% 12%, var(--glow), transparent 55%),
+        radial-gradient(800px 650px at 80% 18%, var(--glow2), transparent 55%),
+        radial-gradient(900px 700px at 50% 105%, rgba(90,255,210,.12), transparent 55%),
+        linear-gradient(180deg, #050812 0%, #070A12 40%, #040612 100%);
+      overflow-x:hidden;
+    }
+    .wrap{max-width:1250px;margin:0 auto;padding:26px 18px 40px;}
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+    .brand{display:flex;align-items:center;gap:12px;user-select:none;}
+    .logo{
+      width:38px;height:38px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 28%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(135deg, rgba(120,190,255,.75), rgba(180,120,255,.55));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 24px rgba(0,0,0,.45);
+      position:relative;
+    }
+    .logo::after{
+      content:"";position:absolute;inset:-2px;border-radius:16px;
+      background:radial-gradient(12px 12px at 70% 35%, rgba(255,255,255,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .brand h1{font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0;color:rgba(255,255,255,.82);}
+    .brand .sub{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:2px;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+    button{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.88);
+      border-radius:14px;
+      padding:10px 12px;
+      font-family:var(--mono);
+      font-size:12px;
+      cursor:pointer;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      box-shadow:0 10px 28px rgba(0,0,0,.35);
+    }
+    button:hover{transform:translateY(-1px);background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.22);}
+    button:active{transform:translateY(0) scale(.99);}
+    input,select,textarea{
+      width:100%;
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,255,255,.9);
+      border-radius:14px;
+      padding:10px 12px;
+      font-family:var(--mono);
+      font-size:12px;
+      outline:none;
+    }
+    textarea{min-height:110px;resize:vertical;}
+    .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;}
+    @media (max-width:980px){.grid{grid-template-columns:1fr;}}
+    .card{
+      border-radius:var(--radius2);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(600px 220px at 15% 0%, rgba(120,190,255,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .card::after{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(520px 240px at 95% 10%, rgba(180,120,255,.10), transparent 58%);
+      pointer-events:none;
+    }
+    .card .inner{position:relative;padding:16px;}
+    .row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;}
+    .panel{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      padding:14px;
+      min-height:86px;
+      box-shadow:0 12px 32px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 55%);
+      pointer-events:none;
+    }
+    .label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:10px;}
+    .kv{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .kv .value{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.86);}
+    .kv .hint{font-family:var(--mono);font-size:12px;color:var(--muted2);}
+    .progress{margin-top:10px;height:12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);overflow:hidden;}
+    .bar{
+      height:100%;width:50%;
+      background:linear-gradient(90deg, rgba(120,190,255,.9), rgba(90,255,210,.85));
+      border-right:1px solid rgba(255,255,255,.25);
+      box-shadow:0 0 24px rgba(120,190,255,.25);
+      transition:width .25s ease;
+    }
+    .tiny{font-size:11px;color:rgba(255,255,255,.55);font-family:var(--mono);line-height:1.4;}
+    .hr{height:1px;background:rgba(255,255,255,.10);margin:10px 0;}
+    .mode{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .chip{
+      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.82);
+      cursor:pointer;user-select:none;transition:background .12s ease, transform .12s ease, border-color .12s ease;
+    }
+    .chip:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.22);}
+    .chip.active{
+      background:rgba(120,190,255,.14);border-color:rgba(120,190,255,.35);color:rgba(255,255,255,.92);
+      box-shadow:0 0 0 3px rgba(120,190,255,.08);
+    }
+    .quest{display:flex;gap:12px;align-items:flex-start;}
+    .checkbox{
+      width:26px;height:26px;border-radius:10px;border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);display:grid;place-items:center;flex:0 0 auto;cursor:pointer;
+      box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .checkbox:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.26);}
+    .checkbox.done{
+      background:rgba(90,255,210,.16);border-color:rgba(90,255,210,.40);box-shadow:0 0 0 3px rgba(90,255,210,.08);
+    }
+    .checkbox svg{opacity:0;transform:scale(.9);transition:opacity .12s ease, transform .12s ease;}
+    .checkbox.done svg{opacity:1;transform:scale(1);}
+    .quest h2{margin:0 0 8px 0;font-size:18px;letter-spacing:.01em;}
+    .quest p{margin:0 0 10px 0;color:var(--muted);font-size:13px;line-height:1.35;}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media (max-width:540px){.split{grid-template-columns:1fr;}}
+    .status{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);
+      font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.84);
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);box-shadow:0 0 0 3px rgba(255,255,255,.07);}
+    .dot.good{background:var(--good);box-shadow:0 0 0 3px rgba(90,255,210,.10);}
+    .dot.warn{background:var(--warn);box-shadow:0 0 0 3px rgba(255,210,120,.10);}
+    .dot.bad{background:var(--bad);box-shadow:0 0 0 3px rgba(255,120,120,.10);}
+    .tree{display:flex;flex-direction:column;gap:10px;padding:4px 2px;}
+    .node{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);
+      font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.84);
+      cursor:pointer;user-select:none;
+    }
+    .node.locked{opacity:.68;background:rgba(255,255,255,.035);}
+    .node .tag{
+      font-size:11px;color:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.12);
+      padding:5px 8px;border-radius:999px;background:rgba(0,0,0,.12);
+    }
+    .log{
+      background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);border-radius:14px;
+      padding:12px;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.86);
+      min-height:150px;white-space:pre-wrap;line-height:1.45;
+    }
+    .footer{margin-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:rgba(255,255,255,.45);font-family:var(--mono);font-size:11px;}
+    .danger{background:rgba(255,120,120,.10)!important;border-color:rgba(255,120,120,.25)!important;}
+    .success{background:rgba(90,255,210,.12)!important;border-color:rgba(90,255,210,.28)!important;}
+  </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+</head>
+<body>
+  <div class="wrap">
+    <div class="topline">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Aether One — Founder Dashboard</h1>
+          <div class="sub" id="dateLine">Loading…</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnSave" title="Save to this browser">Save</button>
+        <button id="btnReset" class="danger" title="Reset everything">Reset</button>
+        <button id="btnExport" title="Export your save file as JSON">Export</button>
+        <button id="btnImport" title="Import a JSON save file">Import</button>
+        <input id="fileInput" type="file" accept="application/json" style="display:none" />
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT / MAIN -->
+      <div class="card">
+        <div class="inner">
+          <div class="row">
+            <!-- Player -->
+            <div class="panel" style="grid-column: span 6;">
+              <div class="label">Player Core</div>
+              <div class="kv">
+                <div class="value">👤 <span id="playerName">Jayden</span></div>
+                <div class="hint">Project: <span id="projectName">Aether One</span></div>
+              </div>
+              <div class="hr"></div>
+              <div class="kv">
+                <div class="value">🎮 Level <span id="level">1</span> — <span id="phase">Prototype</span></div>
+                <div class="hint">🔥 Streak: <span id="streak">0</span></div>
+              </div>
+              <div class="progress" aria-label="XP progress"><div class="bar" id="xpBar"></div></div>
+              <div class="tiny" style="margin-top:8px;">XP: <span id="xp">0</span> / <span id="xpToNext">500</span></div>
+            </div>
+
+            <!-- Mode + State -->
+            <div class="panel" style="grid-column: span 6;">
+              <div class="label">Mode</div>
+              <div class="mode" role="tablist" aria-label="Mode selector">
+                <div class="chip active" data-mode="BUILD">BUILD</div>
+                <div class="chip" data-mode="LEARN">LEARN</div>
+                <div class="chip" data-mode="RECOVER">RECOVER</div>
+              </div>
+              <div class="tiny" style="margin-top:10px;">BUILD = ship features • LEARN = skill-up • RECOVER = recharge (no guilt)</div>
+              <div class="hr"></div>
+              <div class="split">
+                <div>
+                  <div class="label" style="margin-bottom:8px;">Energy</div>
+                  <select id="energy">
+                    <option value="1">⚡░░░░ (1)</option>
+                    <option value="2">⚡⚡░░░ (2)</option>
+                    <option value="3" selected>⚡⚡⚡░░ (3)</option>
+                    <option value="4">⚡⚡⚡⚡░ (4)</option>
+                    <option value="5">⚡⚡⚡⚡⚡ (5)</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="label" style="margin-bottom:8px;">Focus</div>
+                  <select id="focus">
+                    <option value="1">🎯░░░░ (1)</option>
+                    <option value="2">🎯🎯░░░ (2)</option>
+                    <option value="3" selected>🎯🎯🎯░░ (3)</option>
+                    <option value="4">🎯🎯🎯🎯░ (4)</option>
+                    <option value="5">🎯🎯🎯🎯🎯 (5)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- TODAY QUEST -->
+            <div class="panel" style="grid-column: span 12; min-height: 235px;">
+              <div class="label">Today’s Quest (Only One)</div>
+
+              <div class="quest">
+                <div class="checkbox" id="questCheck" role="checkbox" aria-checked="false" tabindex="0" title="Complete quest">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" stroke="rgba(90,255,210,0.95)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+
+                <div style="flex:1 1 auto;">
+                  <h2 id="questTitleText">Wireless Update v0 (GitHub Releases OTA)</h2>
+                  <p id="questDescText">Get wireless firmware updates working so you can ship improvements without a cable.</p>
+
+                  <div class="split" style="margin-top:10px;">
+                    <div>
+                      <div class="label" style="margin-bottom:8px;">Quest Title</div>
+                      <input id="questTitle" placeholder="e.g., Wireless Update v0 (GitHub Releases OTA)" />
+                    </div>
+                    <div>
+                      <div class="label" style="margin-bottom:8px;">Reward XP</div>
+                      <input id="questReward" type="number" min="10" step="10" placeholder="150" />
+                    </div>
+                  </div>
+
+                  <div style="margin-top:10px;">
+                    <div class="label" style="margin-bottom:8px;">Definition of Done</div>
+                    <textarea id="questDone" placeholder="• ...&#10;• ..."></textarea>
+                  </div>
+
+                  <div class="split" style="margin-top:10px;">
+                    <div class="status" id="gamingStatus">
+                      <span class="dot bad" id="gamingDot"></span>
+                      <span>🎮 Gaming: <strong id="gamingText">LOCKED</strong></span>
+                    </div>
+                    <div class="status">
+                      <span class="dot good" id="modeDot"></span>
+                      <span>🟢 Current Mode: <strong id="modeText">BUILD</strong></span>
+                    </div>
+                  </div>
+
+                  <div class="tiny" style="margin-top:10px;">
+                    Rule: Gaming unlocks only after the quest is completed today.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save File -->
+            <div class="panel" style="grid-column: span 12;">
+              <div class="label">Save File / Changelog</div>
+              <div class="split">
+                <div>
+                  <div class="label" style="margin-bottom:8px;">Add New Entry</div>
+                  <input id="logEntry" placeholder="e.g., Day 1 — OTA manifest fetched successfully" />
+                </div>
+                <div style="display:flex; align-items:flex-end; gap:10px;">
+                  <button id="btnAddLog" style="width:100%;">Add</button>
+                  <button id="btnClearLog" class="danger" style="width:100%;">Clear Log</button>
+                </div>
+              </div>
+              <div style="margin-top:10px;" class="log" id="logBox"></div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div>Tip: Keep quests boss-fight sized. No polishing.</div>
+            <div id="autosaveLine">Autosave: on</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT / SIDE -->
+      <div class="card">
+        <div class="inner">
+          <div class="row">
+            <!-- Skill Tree -->
+            <div class="panel" style="grid-column: span 12;">
+              <div class="label">Skill Tree — OTA Progression (Path A)</div>
+              <div class="tree" id="skillTree"></div>
+              <div class="tiny" style="margin-top:8px;">
+                Click a node to toggle 🔓/🔒. Levels auto-update based on unlocked count.
+              </div>
+            </div>
+
+            <!-- Boss Fight -->
+            <div class="panel" style="grid-column: span 12;">
+              <div class="label">Boss Fight</div>
+              <div class="split">
+                <div>
+                  <div class="label" style="margin-bottom:8px;">Boss Name</div>
+                  <input id="bossName" placeholder="e.g., OTA Goes Live" />
+                </div>
+                <div>
+                  <div class="label" style="margin-bottom:8px;">Time Limit (minutes)</div>
+                  <input id="bossMinutes" type="number" min="5" step="5" placeholder="75" />
+                </div>
+              </div>
+
+              <div style="margin-top:10px;">
+                <div class="label" style="margin-bottom:8px;">Boss Goal</div>
+                <input id="bossGoal" placeholder="e.g., device updates over Wi-Fi via GitHub release" />
+              </div>
+
+              <div class="status" style="margin-top:10px;" id="bossStatus">
+                <span class="dot warn" id="bossDot"></span>
+                <span>👾 Status: <strong id="bossState">Not Started</strong></span>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="tiny">Boss is optional for v0 dashboard. Use it when you want a timed sprint.</div>
+            </div>
+
+            <!-- Build Vibe -->
+            <div class="panel" style="grid-column: span 12;">
+              <div class="label">Build Vibe</div>
+              <input id="vibe" placeholder="e.g., TRON • Interstellar • Daft Punk • Hans Zimmer" />
+              <div class="tiny" style="margin-top:8px;">
+                Same playlist every build session = your brain learns “this is build time.”
+              </div>
+            </div>
+
+            <!-- Rules -->
+            <div class="panel" style="grid-column: span 12;">
+              <div class="label">Rules (Non-Negotiable)</div>
+              <div class="tiny">
+                • Only ONE quest per day<br/>
+                • Gaming unlocks after quest completion<br/>
+                • XP only for shipped outcomes, not time<br/>
+                • RECOVER days are allowed — guilt days are not
+              </div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div>Local save stored in your browser (localStorage).</div>
+            <div class="tiny">Aether Dashboard v1 — OTA Path A</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAyu0YodP8B9OU0BqbsGRmaEPx3noOiNuo",
+  authDomain: "aether-dashboard-6edc3.firebaseapp.com",
+  projectId: "aether-dashboard-6edc3",
+  storageBucket: "aether-dashboard-6edc3.firebasestorage.app",
+  messagingSenderId: "115226903538",
+  appId: "1:115226903538:web:8dcc3eb1fc5a40a4c3a16b"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const KEY = "aether_dashboard_ota_pathA_v1";
+
+  const todayKey = () => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const DEFAULTS = () => ({
+    playerName: "Jayden",
+    projectName: "Aether One",
+    level: 1,
+    phase: "Prototype",
+    xp: 0,
+    xpToNext: 500,
+    streak: 0,
+    mode: "BUILD",
+    energy: 3,
+    focus: 3,
+
+    quest: {
+      title: "Wireless Update v0 (GitHub Releases OTA)",
+      reward: 150,
+      done:
+`• Device connects to Wi-Fi
+• Fetches update info (manifest or latest release)
+• Downloads firmware over HTTPS
+• Installs to OTA partition
+• Reboots into new version
+• Shows version before + after`,
+      completedOn: null
+    },
+
+    gamingLocked: true,
+
+    // OTA Path A skill tree (the progression we discussed)
+    // Order matters for "next unlock" feel.
+    skillTree: [
+      { name: "Dashboard System", unlocked: true, tag: "foundation" },
+      { name: "Wireless Update v0 (GitHub Releases OTA)", unlocked: false, tag: "Level 1" },
+      { name: "Version Display (vX.Y.Z shown on device/UI)", unlocked: false, tag: "Level 1" },
+      { name: "Checksum Verify (SHA-256 required)", unlocked: false, tag: "Level 2" },
+      { name: "Rollback Works (A/B slot or fallback)", unlocked: false, tag: "Level 2" },
+      { name: "Release Channels (beta vs stable)", unlocked: false, tag: "Level 3" },
+      { name: "Update Notes Shown (changelog surfaced)", unlocked: false, tag: "Level 3" },
+      { name: "Fleet Telemetry Ping (updated OK)", unlocked: false, tag: "Level 4" },
+      { name: "Staged Rollouts (rate-limit / cohorts)", unlocked: false, tag: "Level 4" },
+      { name: "Signed Updates (public key verify)", unlocked: false, tag: "Level 5" }
+    ],
+
+    boss: {
+      name: "OTA Goes Live",
+      goal: "Device updates over Wi-Fi via GitHub Release",
+      minutes: 75,
+      state: "Not Started"
+    },
+
+    vibe: "TRON • Interstellar • Daft Punk • Hans Zimmer",
+    log: [
+      "Day 0 — Dashboard created",
+      "Day 1 — Path A chosen: GitHub Releases OTA"
+    ],
+
+    lastOpenDay: null,
+    autosave: true
+  });
+
+  const load = () => {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return DEFAULTS();
+      const parsed = JSON.parse(raw);
+      return Object.assign(DEFAULTS(), parsed);
+    } catch {
+      return DEFAULTS();
+    }
+  };
+
+  const save = () => {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    $("autosaveLine").textContent = `Autosave: ${state.autosave ? "on" : "off"} • saved ${new Date().toLocaleTimeString()}`;
+  };
+
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  const recomputeLevel = () => {
+    // Level from unlocked skill count (excluding the always-on Dashboard System)
+    const unlockedCount = state.skillTree.filter(s => s.unlocked).length;
+    // simple mapping: Level 1 at start; Level = 1 + floor((unlockedCount-1)/2)
+    const base = Math.max(0, unlockedCount - 1);
+    const lvl = 1 + Math.floor(base / 2);
+
+    state.level = lvl;
+    state.phase = (lvl <= 1) ? "Prototype" :
+                  (lvl === 2) ? "Safe Updates" :
+                  (lvl === 3) ? "Controlled Rollouts" :
+                  (lvl === 4) ? "Fleet Ready" : "Aether-Grade";
+
+    // XP target scales a bit
+    state.xpToNext = 500 + (lvl - 1) * 250;
+  };
+
+  const dailyCheck = () => {
+    const t = todayKey();
+    if (state.lastOpenDay !== t) {
+      // new day opened
+      state.gamingLocked = true;
+
+      // streak breaks if yesterday wasn't completed
+      if (state.lastOpenDay && state.quest.completedOn !== state.lastOpenDay) {
+        state.streak = 0;
+      }
+
+      state.lastOpenDay = t;
+      if (state.autosave) save();
+    }
+  };
+
+  const renderHeader = () => {
+    const now = new Date();
+    $("dateLine").textContent = `${now.toLocaleString(undefined, { weekday:"long", year:"numeric", month:"long", day:"numeric" })} • Local`;
+  };
+
+  const renderPlayer = () => {
+    $("playerName").textContent = state.playerName;
+    $("projectName").textContent = state.projectName;
+
+    $("level").textContent = state.level;
+    $("phase").textContent = state.phase;
+
+    $("xp").textContent = state.xp;
+    $("xpToNext").textContent = state.xpToNext;
+    $("streak").textContent = state.streak;
+
+    const pct = clamp((state.xp / state.xpToNext) * 100, 0, 100);
+    $("xpBar").style.width = `${pct}%`;
+  };
+
+  const renderMode = () => {
+    $("modeText").textContent = state.mode;
+
+    document.querySelectorAll(".chip").forEach(c => {
+      c.classList.toggle("active", c.dataset.mode === state.mode);
+    });
+
+    const dot = $("modeDot");
+    dot.classList.remove("good","warn","bad");
+    if (state.mode === "BUILD") dot.classList.add("good");
+    else if (state.mode === "LEARN") dot.classList.add("warn");
+    else dot.classList.add("bad");
+
+    $("energy").value = String(state.energy);
+    $("focus").value = String(state.focus);
+  };
+
+  const renderGaming = () => {
+    const locked = state.gamingLocked;
+    $("gamingText").textContent = locked ? "LOCKED" : "UNLOCKED";
+    const dot = $("gamingDot");
+    dot.classList.remove("good","bad","warn");
+    dot.classList.add(locked ? "bad" : "good");
+  };
+
+  const renderQuest = () => {
+    $("questTitleText").textContent = state.quest.title || "Today’s Quest";
+    $("questTitle").value = state.quest.title;
+    $("questReward").value = state.quest.reward;
+    $("questDone").value = state.quest.done;
+
+    const isDoneToday = state.quest.completedOn === todayKey();
+    $("questCheck").classList.toggle("done", isDoneToday);
+    $("questCheck").setAttribute("aria-checked", isDoneToday ? "true" : "false");
+    renderGaming();
+  };
+
+  const renderSkillTree = () => {
+    const host = $("skillTree");
+    host.innerHTML = "";
+
+    state.skillTree.forEach((s, idx) => {
+      const div = document.createElement("div");
+      div.className = "node" + (s.unlocked ? "" : " locked");
+      div.title = "Click to toggle unlock";
+      div.innerHTML = `
+        <span>${s.unlocked ? "🔓" : "🔒"} ${s.name}</span>
+        <span class="tag">${s.tag || ""}</span>
+      `;
+
+      div.addEventListener("click", () => {
+        // prevent locking the foundation dashboard system
+        if (idx === 0) return;
+
+        s.unlocked = !s.unlocked;
+
+        // when OTA v0 unlocks, reward a log entry + some XP
+        if (s.name.includes("Wireless Update v0") && s.unlocked) {
+          addLog(`Unlocked — ${s.name}`);
+          addXP(200);
+        }
+
+        recomputeLevel();
+        if (state.autosave) save();
+        renderAll();
+      });
+
+      host.appendChild(div);
+    });
+  };
+
+  const renderBoss = () => {
+    $("bossName").value = state.boss.name;
+    $("bossMinutes").value = state.boss.minutes;
+    $("bossGoal").value = state.boss.goal;
+
+    $("bossState").textContent = state.boss.state;
+
+    const dot = $("bossDot");
+    dot.classList.remove("good","warn","bad");
+    dot.classList.add(
+      state.boss.state === "Defeated" ? "good" :
+      state.boss.state === "In Progress" ? "warn" : "warn"
+    );
+  };
+
+  const renderVibe = () => { $("vibe").value = state.vibe; };
+
+  const renderLog = () => { $("logBox").textContent = state.log.join("\n"); };
+
+  const renderAll = () => {
+    renderHeader();
+    renderPlayer();
+    renderMode();
+    renderQuest();
+    renderSkillTree();
+    renderBoss();
+    renderVibe();
+    renderLog();
+  };
+
+  const addXP = (amount) => {
+    const amt = Number(amount) || 0;
+    state.xp = Math.max(0, state.xp + amt);
+    // level-up feel: if you exceed target, keep overflow and bump target (simple)
+    while (state.xp >= state.xpToNext) {
+      state.xp -= state.xpToNext;
+      // level up by 1
+      state.level += 1;
+      state.xpToNext += 250;
+    }
+  };
+
+  const addLog = (line) => {
+    const day = state.log.length;
+    const stamp = `Day ${day} — ${line}`;
+    state.log.push(stamp);
+  };
+
+  const completeQuest = () => {
+    const t = todayKey();
+    if (state.quest.completedOn === t) return;
+
+    state.quest.completedOn = t;
+    state.gamingLocked = false;
+    state.streak += 1;
+
+    // reward XP and log
+    addXP(state.quest.reward || 150);
+    addLog(`Quest complete — ${state.quest.title}`);
+
+    if (state.autosave) save();
+    renderAll();
+  };
+
+  // ---- Events
+  document.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      state.mode = chip.dataset.mode;
+      if (state.autosave) save();
+      renderMode();
+    });
+  });
+
+  $("energy").addEventListener("change", () => { state.energy = Number($("energy").value); if (state.autosave) save(); });
+  $("focus").addEventListener("change", () => { state.focus = Number($("focus").value); if (state.autosave) save(); });
+
+  $("questTitle").addEventListener("input", () => { state.quest.title = $("questTitle").value; if (state.autosave) save(); renderQuest(); });
+  $("questReward").addEventListener("input", () => { state.quest.reward = Number($("questReward").value) || 0; if (state.autosave) save(); });
+  $("questDone").addEventListener("input", () => { state.quest.done = $("questDone").value; if (state.autosave) save(); });
+
+  $("questCheck").addEventListener("click", completeQuest);
+  $("questCheck").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); completeQuest(); } });
+
+  $("bossName").addEventListener("input", () => { state.boss.name = $("bossName").value; if (state.autosave) save(); });
+  $("bossMinutes").addEventListener("input", () => { state.boss.minutes = Number($("bossMinutes").value)||0; if (state.autosave) save(); });
+  $("bossGoal").addEventListener("input", () => { state.boss.goal = $("bossGoal").value; if (state.autosave) save(); });
+
+  $("vibe").addEventListener("input", () => { state.vibe = $("vibe").value; if (state.autosave) save(); });
+
+  $("btnAddLog").addEventListener("click", () => {
+    const v = $("logEntry").value.trim();
+    if (!v) return;
+    addLog(v);
+    $("logEntry").value = "";
+    if (state.autosave) save();
+    renderLog();
+  });
+
+  $("btnClearLog").addEventListener("click", () => {
+    state.log = [];
+    addLog("Log cleared");
+    if (state.autosave) save();
+    renderLog();
+  });
+
+  $("btnSave").addEventListener("click", () => save());
+
+  $("btnReset").addEventListener("click", () => {
+    if (!confirm("Reset the dashboard? This clears local data.")) return;
+    state = DEFAULTS();
+    recomputeLevel();
+    save();
+    renderAll();
+  });
+
+  $("btnExport").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "aether_dashboard_save.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  $("btnImport").addEventListener("click", () => $("fileInput").click());
+
+  $("fileInput").addEventListener("change", async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const text = await f.text();
+    try{
+      const parsed = JSON.parse(text);
+      state = Object.assign(DEFAULTS(), parsed);
+      recomputeLevel();
+      save();
+      renderAll();
+    }catch{
+      alert("Invalid JSON save file.");
+    }
+    e.target.value = "";
+  });
+
+  // ---- init
+  let state = load();
+  dailyCheck();
+  recomputeLevel();
+  // ensure initial quest fields are filled
+  if (!state.quest.done) state.quest.done = DEFAULTS().quest.done;
+  renderAll();
+  save();
+})();
+</script>
+</body>
+</html>
